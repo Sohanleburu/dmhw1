@@ -82,23 +82,26 @@ score_view_count_df = load_data_from_bigquery(score_view_count_query)
 # Visualize Top 10 Programming Languages Tags with Plotly
 fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count', 
                       labels={'flattened_tags': 'Programming Language', 'tag_count': 'Number of Questions'}, 
-                      title='Top 10 Programming Languages Tags')
+                      title='Top 10 Programming Languages Tags', color_discrete_sequence=['red'])
 st.plotly_chart(fig_top_tags)
+
 
 # Visualize Javascript Questions Trend with Plotly
 fig_javascript_trend = px.line(javascript_trend_df, x='year', y='total_questions', 
                                labels={'year': 'Year', 'total_questions': 'Number of Questions'}, 
-                               title='Yearly Trend of JavaScript Questions')
+                               title='Yearly Trend of JavaScript Questions', color_discrete_sequence=['red'])
 st.plotly_chart(fig_javascript_trend)
+
 
 # Visualize Distribution of Number of Answers per Question with Plotly
 fig_answer_count_histogram = px.bar(answer_count_histogram_df, x='answer_count', y='number_of_questions', 
                                     labels={'answer_count': 'Number of Answers', 'number_of_questions': 'Number of Questions'}, 
-                                    title='Distribution of Number of Answers per Question')
+                                    title='Distribution of Number of Answers per Question', color_discrete_sequence=['red'])
 st.plotly_chart(fig_answer_count_histogram)
 
 # Visualize Relationship Between Question Score and View Count for JavaScript Questions with Plotly
 fig_score_view_count = px.scatter(score_view_count_df, x='view_count', y='score', 
                                   labels={'score': 'Score', 'view_count': 'View Count'}, 
-                                  title='Score vs. View Count for JavaScript Questions')
+                                  title='Score vs. View Count for JavaScript Questions',
+                                  color_discrete_sequence=['red'])  # Assuming discrete coloring is acceptable
 st.plotly_chart(fig_score_view_count)
