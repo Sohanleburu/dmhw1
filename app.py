@@ -86,11 +86,12 @@ fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count',
 st.plotly_chart(fig_top_tags)
 
 
-# Visualize Javascript Questions Trend with Plotly
-fig_javascript_trend = px.line(javascript_trend_df, x='year', y='total_questions', 
-                               labels={'year': 'Year', 'total_questions': 'Number of Questions'}, 
-                               title='Yearly Trend of JavaScript Questions', color_discrete_sequence=['red'])
-st.plotly_chart(fig_javascript_trend)
+# Visualize Javascript Questions Trend with Plotly as a Pie Chart
+fig_javascript_trend_pie = px.pie(javascript_trend_df, names='year', values='total_questions', 
+                                  title='Distribution of Stack Overflow Questions with "javascript" Tag by Year',
+                                  color_discrete_sequence=px.colors.sequential.Reds)
+st.plotly_chart(fig_javascript_trend_pie)
+
 
 
 # Visualize Distribution of Number of Answers per Question with Plotly
