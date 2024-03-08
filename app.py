@@ -17,23 +17,15 @@ def load_data_from_bigquery(query):
     return dataframe
 
 # Query for top 10 programming tags
-query = """
-SELECT flattened_tags, COUNT(*) AS tag_count
-FROM (
-    SELECT SPLIT(tags, '|') AS tags
-    FROM `bigquery-public-data.stackoverflow.posts_questions`
-    WHERE EXTRACT(YEAR FROM creation_date) >= 2006
-), UNNEST(tags) AS flattened_tags
-GROUP BY flattened_tags
-ORDER BY tag_count DESC
-LIMIT 6
+top_tags_query = """
+SELECT flattened_tags, count(*) as tag_count from 
+(select split(tags , '|') as tags FROM `bigquery-public-data.stackoverflow.posts_questions` 
+Where EXTRACT (YEAR from creation_date) >= 2008)
+cross join unnest(tags) as flattened_tags
+group by flattened_tags
+order by tag_count desc
+limit 10
 """
-
-# Execute the query and store the results in a pandas DataFrame.
-dataframe = client.query(query).to_dataframe()
-
-# Print the results.
-print(dataframe)
 
 # Query for yearly count of questions with 'javascript' tag
 javascript_trend_query = """
@@ -90,7 +82,7 @@ score_view_count_df = load_data_from_bigquery(score_view_count_query)
 # Visualize Top 10 Programming Languages Tags with Plotly
 fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count', 
                       labels={'flattened_tags': 'Programming Language', 'tag_count': 'Number of Questions'}, 
-                      title='Top 6 Programming Languages Tags', color_discrete_sequence=['red'])
+                      title='Top 10 Programming Languages Tags', color_discrete_sequence=['red'])
 st.plotly_chart(fig_top_tags)
 
 
