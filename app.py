@@ -79,11 +79,23 @@ javascript_trend_df = load_data_from_bigquery(javascript_trend_query)
 answer_count_histogram_df = load_data_from_bigquery(answer_count_histogram_query)
 score_view_count_df = load_data_from_bigquery(score_view_count_query)
 
-# Visualize Top 10 Programming Languages Tags with Plotly
-fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count', 
-                      labels={'flattened_tags': 'Programming Language', 'tag_count': 'Number of Questions'}, 
-                      title='Top 10 Programming Languages Tags', color_discrete_sequence=['red'])
-st.plotly_chart(fig_top_tags)
+import plotly.express as px
+
+# Assuming 'dataframe' contains the result of your query and it's already sorted
+# If your dataframe is not sorted or does not only contain the top entries you want to display,
+# you may need to prepare it similarly to this:
+# dataframe = dataframe.sort_values(by='tag_count', ascending=False).head(10) 
+
+# Visualize Top 10 (or 6, depending on your dataframe) Programming Languages Tags with Plotly
+fig_top_tags = px.bar(dataframe, x='tag_count', y='flattened_tags',
+                      labels={'flattened_tags': 'Tags', 'tag_count': 'Tag Count'}, 
+                      title='Top 6 Tags in Stack Overflow Questions', 
+                      color_discrete_sequence=['red'], orientation='h')
+
+# To display the highest value at the top, we can invert the y-axis:
+fig_top_tags.update_layout(yaxis={'categoryorder':'total ascending'})
+
+fig_top_tags.show()
 
 
 # Visualize Javascript Questions Trend with Plotly as a Pie Chart
