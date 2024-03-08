@@ -17,15 +17,23 @@ def load_data_from_bigquery(query):
     return dataframe
 
 # Query for top 10 programming tags
-top_tags_query = """
-SELECT flattened_tags, count(*) as tag_count from 
-(select split(tags , '|') as tags FROM `bigquery-public-data.stackoverflow.posts_questions` 
-Where EXTRACT (YEAR from creation_date) >= 2008)
-cross join unnest(tags) as flattened_tags
-group by flattened_tags
-order by tag_count desc
-limit 10
+query = """
+SELECT flattened_tags, COUNT(*) AS tag_count
+FROM (
+    SELECT SPLIT(tags, '|') AS tags
+    FROM `bigquery-public-data.stackoverflow.posts_questions`
+    WHERE EXTRACT(YEAR FROM creation_date) >= 2006
+), UNNEST(tags) AS flattened_tags
+GROUP BY flattened_tags
+ORDER BY tag_count DESC
+LIMIT 6
 """
+
+# Execute the query and store the results in a pandas DataFrame.
+dataframe = client.query(query).to_dataframe()
+
+# Print the results.
+print(dataframe)
 
 # Query for yearly count of questions with 'javascript' tag
 javascript_trend_query = """
@@ -79,23 +87,11 @@ javascript_trend_df = load_data_from_bigquery(javascript_trend_query)
 answer_count_histogram_df = load_data_from_bigquery(answer_count_histogram_query)
 score_view_count_df = load_data_from_bigquery(score_view_count_query)
 
-import plotly.express as px
-
-# Assuming 'dataframe' contains the result of your query and it's already sorted
-# If your dataframe is not sorted or does not only contain the top entries you want to display,
-# you may need to prepare it similarly to this:
-# dataframe = dataframe.sort_values(by='tag_count', ascending=False).head(10) 
-
-# Visualize Top 10 (or 6, depending on your dataframe) Programming Languages Tags with Plotly
-fig_top_tags = px.bar(dataframe, x='tag_count', y='flattened_tags',
-                      labels={'flattened_tags': 'Tags', 'tag_count': 'Tag Count'}, 
-                      title='Top 6 Tags in Stack Overflow Questions', 
-                      color_discrete_sequence=['red'], orientation='h')
-
-# To display the highest value at the top, we can invert the y-axis:
-fig_top_tags.update_layout(yaxis={'categoryorder':'total ascending'})
-
-fig_top_tags.show()
+# Visualize Top 10 Programming Languages Tags with Plotly
+fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count', 
+                      labels={'flattened_tags': 'Programming Language', 'tag_count': 'Number of Questions'}, 
+                      title='Top 6 Programming Languages Tags', color_discrete_sequence=['red'])
+st.plotly_chart(fig_top_tags)
 
 
 # Visualize Javascript Questions Trend with Plotly as a Pie Chart
@@ -112,12 +108,9 @@ fig_answer_count_histogram = px.bar(answer_count_histogram_df, x='answer_count',
                                     title='Distribution of Number of Answers per Question', color_discrete_sequence=['red'])
 st.plotly_chart(fig_answer_count_histogram)
 
-#import plotly.express as px
-
-# Visualize the distribution of Question Scores for JavaScript Questions with Plotly
-fig_score_histogram = px.histogram(score_view_count_df, x='score',
-                                   labels={'score': 'Score'},
-                                   title='Distribution of Scores for JavaScript Questions',
-                                   color_discrete_sequence=['red'])  # Adjust the color if needed
-
-fig_score_histogram.show()
+# Visualize Relationship Between Question Score and View Count for JavaScript Questions with Plotly
+fig_score_view_count = px.scatter(score_view_count_df, x='view_count', y='score', 
+                                  labels={'score': 'Score', 'view_count': 'View Count'}, 
+                                  title='Score vs. View Count for JavaScript Questions',
+                                  color_discrete_sequence=['red'])  # Assuming discrete coloring is acceptable
+st.plotly_chart(fig_score_view_count)
