@@ -112,9 +112,12 @@ fig_answer_count_histogram = px.bar(answer_count_histogram_df, x='answer_count',
                                     title='Distribution of Number of Answers per Question', color_discrete_sequence=['red'])
 st.plotly_chart(fig_answer_count_histogram)
 
-# Visualize Relationship Between Question Score and View Count for JavaScript Questions with Plotly
-fig_score_view_count = px.scatter(score_view_count_df, x='view_count', y='score', 
-                                  labels={'score': 'Score', 'view_count': 'View Count'}, 
-                                  title='Score vs. View Count for JavaScript Questions',
-                                  color_discrete_sequence=['red'])  # Assuming discrete coloring is acceptable
-st.plotly_chart(fig_score_view_count)
+#import plotly.express as px
+
+# Visualize the distribution of Question Scores for JavaScript Questions with Plotly
+fig_score_histogram = px.histogram(score_view_count_df, x='score',
+                                   labels={'score': 'Score'},
+                                   title='Distribution of Scores for JavaScript Questions',
+                                   color_discrete_sequence=['red'])  # Adjust the color if needed
+
+fig_score_histogram.show()
