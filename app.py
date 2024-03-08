@@ -22,7 +22,7 @@ SELECT flattened_tags, COUNT(*) AS tag_count
 FROM (
     SELECT SPLIT(tags, '|') AS tags
     FROM `bigquery-public-data.stackoverflow.posts_questions`
-    WHERE EXTRACT(YEAR FROM creation_date) >= 2006
+    WHERE EXTRACT(YEAR FROM creation_date) >= 2008
 ), UNNEST(tags) AS flattened_tags
 GROUP BY flattened_tags
 ORDER BY tag_count DESC
