@@ -11,20 +11,22 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 # Generalized function to load data from BigQuery
 def load_data_from_bigquery(query):
-    project_id = 'bigquery-255'
+    project_id = 'bigquerym-255'
     client = bigquery.Client(project=project_id)
     dataframe = client.query(query).to_dataframe()
     return dataframe
 
 # Query for top 10 programming tags
 top_tags_query = """
-SELECT flattened_tags, count(*) as tag_count from 
-(select split(tags , '|') as tags FROM `bigquery-public-data.stackoverflow.posts_questions` 
-Where EXTRACT (YEAR from creation_date) >= 2008)
-cross join unnest(tags) as flattened_tags
-group by flattened_tags
-order by tag_count desc
-limit 10
+SELECT flattened_tags, COUNT(*) AS tag_count
+FROM (
+    SELECT SPLIT(tags, '|') AS tags
+    FROM `bigquery-public-data.stackoverflow.posts_questions`
+    WHERE EXTRACT(YEAR FROM creation_date) >= 2006
+), UNNEST(tags) AS flattened_tags
+GROUP BY flattened_tags
+ORDER BY tag_count DESC
+LIMIT 6
 """
 
 # Query for yearly count of questions with 'javascript' tag
