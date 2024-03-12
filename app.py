@@ -11,24 +11,21 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_key_path
 
 # Generalized function to load data from BigQuery
 def load_data_from_bigquery(query):
-    project_id = 'bigquerym-255'
+    project_id = 'bigquery-255'
     client = bigquery.Client(project=project_id)
     dataframe = client.query(query).to_dataframe()
     return dataframe
 
 # Query for top 10 programming tags
 top_tags_query = """
-SELECT flattened_tags, COUNT(*) AS tag_count
-FROM (
-    SELECT SPLIT(tags, '|') AS tags
-    FROM `bigquery-public-data.stackoverflow.posts_questions`
-    WHERE EXTRACT(YEAR FROM creation_date) >= 2006
-) AS subquery, UNNEST(tags) AS flattened_tags
-GROUP BY flattened_tags
-ORDER BY tag_count DESC
-LIMIT 6
+SELECT flattened_tags, count(*) as tag_count from 
+(select split(tags , '|') as tags FROM `bigquery-public-data.stackoverflow.posts_questions` 
+Where EXTRACT (YEAR from creation_date) >= 2008)
+cross join unnest(tags) as flattened_tags
+group by flattened_tags
+order by tag_count desc
+limit 10
 """
-
 
 # Query for yearly count of questions with 'javascript' tag
 javascript_trend_query = """
@@ -83,18 +80,10 @@ answer_count_histogram_df = load_data_from_bigquery(answer_count_histogram_query
 score_view_count_df = load_data_from_bigquery(score_view_count_query)
 
 # Visualize Top 10 Programming Languages Tags with Plotly
-# Assuming 'dataframe' contains the result of your query
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(10, 8))
-plt.barh(dataframe['flattened_tags'], dataframe['tag_count'], color='red')
-plt.xlabel('Tag Count')
-plt.ylabel('Tags')
-plt.xticks(rotation=45)
-plt.title('Top 6 Tags in Stack Overflow Questions')
-plt.gca().invert_yaxis()  # To display the highest value at the top
-plt.tight_layout()  # Adjust layout to prevent clipping of labels
-plt.show()
+fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count', 
+                      labels={'flattened_tags': 'Programming Language', 'tag_count': 'Number of Questions'}, 
+                      title='Top 10 Programming Languages Tags', color_discrete_sequence=['red'])
+st.plotly_chart(fig_top_tags)
 
 
 # Visualize Javascript Questions Trend with Plotly as a Pie Chart
