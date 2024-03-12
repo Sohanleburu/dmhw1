@@ -23,11 +23,12 @@ FROM (
     SELECT SPLIT(tags, '|') AS tags
     FROM `bigquery-public-data.stackoverflow.posts_questions`
     WHERE EXTRACT(YEAR FROM creation_date) >= 2006
-), UNNEST(tags) AS flattened_tags
+) AS subquery, UNNEST(tags) AS flattened_tags
 GROUP BY flattened_tags
 ORDER BY tag_count DESC
 LIMIT 6
 """
+
 
 # Query for yearly count of questions with 'javascript' tag
 javascript_trend_query = """
