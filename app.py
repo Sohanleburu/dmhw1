@@ -121,11 +121,11 @@ import streamlit as st
 
 # Assuming score_view_count_df is your DataFrame and it's structured correctly
 # with 'view_count' and 'score' columns.
+# Histogram for View Count
+fig_view_count_histogram = px.histogram(score_view_count_df, x='view_count', 
+                                        labels={'view_count': 'View Count'}, 
+                                        title='Distribution of View Counts for JavaScript Questions',
+                                        color_discrete_sequence=['red'])
 
-fig_score_view_count_line = px.line(score_view_count_df, x='view_count', y='score', 
-                                    labels={'score': 'Score', 'view_count': 'View Count'}, 
-                                    title='Score vs. View Count for JavaScript Questions',
-                                    color_discrete_sequence=['red'])  # Assuming discrete coloring is acceptable
-
-st.plotly_chart(fig_score_view_count_line)
+st.plotly_chart(fig_view_count_histogram)
 
