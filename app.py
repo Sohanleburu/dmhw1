@@ -115,32 +115,16 @@ fig_answer_count_scatter = px.scatter(answer_count_histogram_df, x='answer_count
 
 st.plotly_chart(fig_answer_count_scatter)
 
-import numpy as np
-import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Assuming 'score_view_count_df' is your DataFrame and it's structured correctly
+# Assuming score_view_count_df is your DataFrame and it's structured correctly
 # with 'view_count' and 'score' columns.
-# This is just an example and should be replaced with your actual DataFrame loading or creation code
-data = {
-    'score': [1, 2, 3],  # Example scores
-    'view_count': [100, 150, 200]  # Example view counts
-}
-score_view_count_df = pd.DataFrame(data)
 
-# Replicating the view_count based on the score to weight the view counts
-data_for_histogram = np.repeat(score_view_count_df['view_count'], score_view_count_df['score'])
-
-# Convert the array back to a DataFrame for Plotly
-histogram_df = pd.DataFrame(data_for_histogram, columns=['Weighted View Count'])
-
-# Now, you can plot the histogram using Plotly Express
-fig_view_count_histogram = px.histogram(histogram_df, x='Weighted View Count',
-                                        labels={'Weighted View Count': 'View Count'},
-                                        title='Distribution of View Counts for JavaScript Questions',
-                                        color_discrete_sequence=['red'])
+# Line Graph for Relationship Between Question Score and View Count
+fig_score_view_count_line = px.line(score_view_count_df, x='view_count', y='score', 
+                                    labels={'score': 'Score', 'view_count': 'View Count'}, 
+                                    title='Score vs. View Count for JavaScript Questions')
 
 # Display the plot in Streamlit
-st.plotly_chart(fig_view_count_histogram)
-
+st.plotly_chart(fig_score_view_count_line)
