@@ -96,7 +96,7 @@ st.plotly_chart(fig_top_tags)
 
 # Visualize Javascript Questions Trend with Plotly as a Pie Chart
 fig_javascript_trend_pie = px.pie(javascript_trend_df, names='year', values='total_questions', 
-                                  title='Distribution of Stack Overflow Questions with "javascript" Tag by Year',
+                                  title='Distribution of Stack Overflow Questions with "python" Tag by Year',
                                   color_discrete_sequence=px.colors.sequential.Reds)
 st.plotly_chart(fig_javascript_trend_pie)
 
@@ -115,24 +115,32 @@ fig_answer_count_scatter = px.scatter(answer_count_histogram_df, x='answer_count
 
 st.plotly_chart(fig_answer_count_scatter)
 
-
+import numpy as np
+import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Assuming score_view_count_df is your DataFrame and it's structured correctly
+# Assuming 'score_view_count_df' is your DataFrame and it's structured correctly
 # with 'view_count' and 'score' columns.
+# This is just an example and should be replaced with your actual DataFrame loading or creation code
+data = {
+    'score': [1, 2, 3],  # Example scores
+    'view_count': [100, 150, 200]  # Example view counts
+}
+score_view_count_df = pd.DataFrame(data)
 
-import plotly.express as px
-import streamlit as st
+# Replicating the view_count based on the score to weight the view counts
+data_for_histogram = np.repeat(score_view_count_df['view_count'], score_view_count_df['score'])
 
-# Assuming score_view_count_df is your DataFrame and it's structured correctly
-# with 'view_count' and 'score' columns.
+# Convert the array back to a DataFrame for Plotly
+histogram_df = pd.DataFrame(data_for_histogram, columns=['Weighted View Count'])
 
-# Histogram for View Count
-fig_view_count_histogram = px.histogram(score_view_count_df, x='view_count', 
-                                        labels={'view_count': 'View Count'}, 
+# Now, you can plot the histogram using Plotly Express
+fig_view_count_histogram = px.histogram(histogram_df, x='Weighted View Count',
+                                        labels={'Weighted View Count': 'View Count'},
                                         title='Distribution of View Counts for JavaScript Questions',
                                         color_discrete_sequence=['red'])
 
+# Display the plot in Streamlit
 st.plotly_chart(fig_view_count_histogram)
 
