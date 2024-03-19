@@ -80,7 +80,7 @@ answer_count_histogram_df = load_data_from_bigquery(answer_count_histogram_query
 score_view_count_df = load_data_from_bigquery(score_view_count_query)
 
 # Visualize Top 10 Programming Languages Tags with Plotly
-fig_top_tags = px.bar(top_tags_df, x='flattened_tags', y='tag_count', 
+fig_top_tags = px.bar(top_tags_df, x='ftag_count', y='flattened_tags', 
                       labels={'flattened_tags': 'Programming Language', 'tag_count': 'Number of Questions'}, 
                       title='Top 10 Programming Languages Tags', color_discrete_sequence=['red'])
 st.plotly_chart(fig_top_tags)
@@ -88,7 +88,7 @@ st.plotly_chart(fig_top_tags)
 
 # Visualize Javascript Questions Trend with Plotly as a Pie Chart
 fig_javascript_trend_pie = px.pie(javascript_trend_df, names='year', values='total_questions', 
-                                  title='Distribution of Stack Overflow Questions with "javascript" Tag by Year',
+                                  title='Distribution of Stack Overflow Questions with "python" Tag by Year',
                                   color_discrete_sequence=px.colors.sequential.Reds)
 st.plotly_chart(fig_javascript_trend_pie)
 
