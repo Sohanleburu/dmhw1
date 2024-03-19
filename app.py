@@ -105,8 +105,6 @@ st.plotly_chart(fig_javascript_trend_pie)
 import plotly.express as px
 import streamlit as st
 
-import plotly.express as px
-
 # Assuming answer_count_histogram_df is your DataFrame and it's structured correctly
 # with 'answer_count' and 'number_of_questions' columns.
 
@@ -115,8 +113,9 @@ fig_answer_count_line = px.line(answer_count_histogram_df, x='answer_count', y='
                                 title='Distribution of Number of Answers per Question', 
                                 color_discrete_sequence=['red'])
 
-# Display the plot
-fig_answer_count_line.show()
+# Display the plot in Streamlit
+st.plotly_chart(fig_answer_count_line)
+
 
 import plotly.express as px
 import streamlit as st
