@@ -116,10 +116,6 @@ fig_answer_count_line = px.line(answer_count_histogram_df, x='answer_count', y='
 # Display the plot in Streamlit
 st.plotly_chart(fig_answer_count_line)
 
-
-import plotly.express as px
-import streamlit as st
-
 import plotly.express as px
 import streamlit as st
 
@@ -129,7 +125,8 @@ import streamlit as st
 # Scatter Plot for Relationship Between Question Score and View Count
 fig_score_view_count_scatter = px.scatter(score_view_count_df, x='view_count', y='score', 
                                           labels={'score': 'Score', 'view_count': 'View Count'}, 
-                                          title='Score vs. View Count for JavaScript Questions')
+                                          title='Score vs. View Count for JavaScript Questions',
+                                          color_discrete_sequence=['red'])  # Set marker color to red
 
 # Display the plot in Streamlit
 st.plotly_chart(fig_score_view_count_scatter)
