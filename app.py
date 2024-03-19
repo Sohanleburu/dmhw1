@@ -116,16 +116,40 @@ fig_answer_count_scatter = px.scatter(answer_count_histogram_df, x='answer_count
 st.plotly_chart(fig_answer_count_scatter)
 
 
+import numpy as np
+import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Assuming score_view_count_df is your DataFrame and it's structured correctly
-# with 'view_count' and 'score' columns.
-# Histogram for View Count
-fig_view_count_histogram = px.histogram(score_view_count_df, x='view_count', 
-                                        labels={'view_count': 'View Count'}, 
-                                        title='Distribution of View Counts for JavaScript Questions',
-                                        color_discrete_sequence=['red'])
+# Assuming 'dataframe' has columns 'score' and 'view_count'
+# Example DataFrame creation (if your 'dataframe' variable isn't defined yet)
+# This is just an example and should be replaced with your actual DataFrame loading or creation code
+data = {
+    'score': [1, 2, 3],  # Example scores
+    'view_count': [100, 150, 200]  # Example view counts
+}
+dataframe = pd.DataFrame(data)
 
-st.plotly_chart(fig_view_count_histogram)
+# Make sure this variable is defined before using it in the histogram plot
+# This approach weights the view_count by the score, repeating view_count values 'score' times
+data_for_histogram = np.repeat(dataframe['view_count'], dataframe['score'])
+
+# Convert the array back to a DataFrame for Plotly
+histogram_df = pd.DataFrame(data_for_histogram, columns=['Weighted View Count'])
+
+# Now, you can plot the histogram using Plotly Express
+fig = px.histogram(histogram_df, x='Weighted View Count', 
+                   nbins=30, color_discrete_sequence=['red'])
+
+# Updating layout for better visualization
+fig.update_layout(
+    title='Histogram of JavaScript Questions by Weighted View Count',
+    xaxis_title='Weighted View Count',
+    yaxis_title='Frequency of Questions',
+    bargap=0.2,  # Gap between bars
+)
+
+# Display the plot in Streamlit
+st.plotly_chart(fig)
+
 
