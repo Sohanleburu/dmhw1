@@ -102,11 +102,19 @@ st.plotly_chart(fig_javascript_trend_pie)
 
 
 
-# Visualize Distribution of Number of Answers per Question with Plotly
-fig_answer_count_histogram = px.bar(answer_count_histogram_df, x='answer_count', y='number_of_questions', 
-                                    labels={'answer_count': 'Number of Answers', 'number_of_questions': 'Number of Questions'}, 
-                                    title='Distribution of Number of Answers per Question', color_discrete_sequence=['red'])
-st.plotly_chart(fig_answer_count_histogram)
+import plotly.express as px
+import streamlit as st
+
+# Assuming answer_count_histogram_df is your DataFrame and it's structured correctly
+# with 'answer_count' and 'number_of_questions' columns.
+
+fig_answer_count_scatter = px.scatter(answer_count_histogram_df, x='answer_count', y='number_of_questions', 
+                                      labels={'answer_count': 'Number of Answers', 'number_of_questions': 'Number of Questions'}, 
+                                      title='Distribution of Number of Answers per Question', 
+                                      color_discrete_sequence=['red'])
+
+st.plotly_chart(fig_answer_count_scatter)
+
 
 # Visualize Relationship Between Question Score and View Count for JavaScript Questions with Plotly
 fig_score_view_count = px.scatter(score_view_count_df, x='view_count', y='score', 
