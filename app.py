@@ -121,13 +121,16 @@ fig_answer_count_line.show()
 import plotly.express as px
 import streamlit as st
 
+import plotly.express as px
+import streamlit as st
+
 # Assuming score_view_count_df is your DataFrame and it's structured correctly
 # with 'view_count' and 'score' columns.
 
-# Line Graph for Relationship Between Question Score and View Count
-fig_score_view_count_line = px.line(score_view_count_df, x='view_count', y='score', 
-                                    labels={'score': 'Score', 'view_count': 'View Count'}, 
-                                    title='Score vs. View Count for JavaScript Questions')
+# Scatter Plot for Relationship Between Question Score and View Count
+fig_score_view_count_scatter = px.scatter(score_view_count_df, x='view_count', y='score', 
+                                          labels={'score': 'Score', 'view_count': 'View Count'}, 
+                                          title='Score vs. View Count for JavaScript Questions')
 
 # Display the plot in Streamlit
-st.plotly_chart(fig_score_view_count_line)
+st.plotly_chart(fig_score_view_count_scatter)
